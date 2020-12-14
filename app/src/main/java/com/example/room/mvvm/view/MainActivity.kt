@@ -71,28 +71,36 @@ class MainActivity : AppCompatActivity() {
 
         btnReadLogin.setOnClickListener {
 
+            lblReadResponse.text = "- - -"
+            lblUseraname.text = "- - -"
+
             val strUsername = txtRoomUsername.text.toString().trim()
 
-            loginViewModel.getLoginDetails(context, strUsername)!!.observe(this, Observer {
+            if(strUsername.isNotEmpty()){
+                loginViewModel.getLoginDetails(context, strUsername)!!.observe(this, Observer {
 
-                if (it == null) {
-                    lblReadResponse.text = "Data Not Found"
-                    lblUseraname.text = "- - -"
-                } else {
-                    lblUseraname.text = it.Username
+                    if (it == null) {
+                        lblReadResponse.text = "Data Not Found"
+                        lblUseraname.text = "- - -"
+                    } else {
+                        lblUseraname.text = it.Username
 
-                    AlertDialog.Builder(this)
-                        .setTitle(it.Username)
-                        .setMessage(it.XAcc)
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok,
-                            DialogInterface.OnClickListener { dialog, which -> //re-request
-                            })
-                        .show()
+                        AlertDialog.Builder(this)
+                            .setTitle(it.Username)
+                            .setMessage(it.XAcc)
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok,
+                                DialogInterface.OnClickListener { dialog, which -> //re-request
+                                })
+                            .show()
 
-                    lblReadResponse.text = "Data Found Successfully"
-                }
-            })
+                        lblReadResponse.text = "Data Found Successfully"
+                    }
+                })
+            }
+            else{
+                Toast.makeText(this, "Please enter the username", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
